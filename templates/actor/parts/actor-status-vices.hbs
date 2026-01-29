@@ -1,0 +1,48 @@
+{{!-- Status Effects and Vices Tab --}}
+<div class="status-vices flexcol">
+  
+  {{!-- Status Effects Section --}}
+  <div class="status-effects-section">
+    <h3 class="resource-label">Status Effects</h3>
+    <div class="status-list flexcol">
+      {{#each config.statusEffects as |status key|}}
+      {{#with (lookup ../system.statusEffects key) as |actorStatus|}}
+      <div class="status-item flexrow flex-group-center">
+        <input type="checkbox" name="system.statusEffects.{{key}}.active" {{checked actorStatus.active}} title="Active"/>
+        <label class="status-name">{{localize status.label}}</label>
+      </div>
+      {{else}}
+      <div class="status-item flexrow flex-group-center">
+        <input type="checkbox" name="system.statusEffects.{{key}}.active" title="Active"/>
+        <label class="status-name">{{localize status.label}}</label>
+      </div>
+      {{/with}}
+      {{/each}}
+    </div>
+  </div>
+
+  {{!-- Vices Section --}}
+  <div class="vices-section">
+    <h3 class="resource-label">Vices</h3>
+    <div class="vices-list flexcol">
+      {{#each config.vices as |vice key|}}
+      {{#with (lookup ../system.vices key) as |actorVice|}}
+      <div class="vice-item flexrow flex-group-center">
+        <input type="checkbox" name="system.vices.{{key}}.has" {{checked actorVice.has}} title="Has Vice"/>
+        <label class="vice-name">{{vice.name}}</label>
+        {{#if actorVice.has}}
+        <input type="checkbox" name="system.vices.{{key}}.alleviated" {{checked actorVice.alleviated}} title="Alleviated Today"/>
+        <label class="vice-alleviated">Alleviated</label>
+        {{/if}}
+      </div>
+      {{else}}
+      <div class="vice-item flexrow flex-group-center">
+        <input type="checkbox" name="system.vices.{{key}}.has" title="Has Vice"/>
+        <label class="vice-name">{{vice.name}}</label>
+      </div>
+      {{/with}}
+      {{/each}}
+    </div>
+  </div>
+
+</div>

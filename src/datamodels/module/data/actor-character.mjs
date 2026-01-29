@@ -60,10 +60,56 @@ export default class BoilerplateCharacter extends BoilerplateActorBase {
       max: new fields.NumberField({ ...requiredInteger, initial: 3, min: 0 })
     });
 
-    // Status Effects - array of active conditions
-    schema.statusEffects = new fields.ArrayField(
-      new fields.StringField({ required: true, blank: true }),
-      { initial: [] }
+    // Status Effects - object keyed by status ID from config
+    // Each status has an active flag
+    // Default status effects if config not yet loaded
+    const defaultStatusEffects = {
+      exhausted: { active: false },
+      dehydrated: { active: false },
+      vice: { active: false },
+      downed: { active: false },
+      dead: { active: false },
+      ghost: { active: false },
+      zombie: { active: false },
+      prone: { active: false },
+      poisoned: { active: false },
+      drunk: { active: false },
+      filthy: { active: false },
+      burning: { active: false },
+      stunned: { active: false },
+      terrified: { active: false },
+      horny: { active: false },
+      blinded: { active: false },
+      charmed: { active: false },
+      restrained: { active: false },
+      berserk: { active: false }
+    };
+    const statusEffectKeys = Object.keys(CONFIG.VNV?.statusEffects || defaultStatusEffects);
+    schema.statusEffects = new fields.SchemaField(
+      statusEffectKeys.reduce((obj, key) => {
+        obj[key] = new fields.SchemaField({
+          active: new fields.BooleanField({ initial: false })
+        });
+        return obj;
+      }, {})
+    );
+
+    // Vices - object keyed by vice ID from config (numeric keys: "1", "2", etc.)
+    // Each vice has a has flag (whether character has it) and alleviated flag
+    // Default to 20 vices if config not yet loaded
+    const defaultVices = {};
+    for (let i = 1; i <= 20; i++) {
+      defaultVices[i.toString()] = { has: false, alleviated: false };
+    }
+    const viceKeys = Object.keys(CONFIG.VNV?.vices || defaultVices);
+    schema.vices = new fields.SchemaField(
+      viceKeys.reduce((obj, key) => {
+        obj[key] = new fields.SchemaField({
+          has: new fields.BooleanField({ initial: false }),
+          alleviated: new fields.BooleanField({ initial: false }) // Track if alleviated today
+        });
+        return obj;
+      }, {})
     );
 
     // Combat Actions - tracking actions per turn
@@ -90,16 +136,22 @@ export default class BoilerplateCharacter extends BoilerplateActorBase {
     this.attributes.level.value = level;
 
     // Check for Exhausted status based on sleep tracking
+    // Characters need 6 hours of sleep every 24 hours or become Exhausted
     const requiredSleepHours = CONFIG.VNV?.rules?.requiredSleepHours || 6;
     const sleepCheckInterval = CONFIG.VNV?.rules?.sleepCheckInterval || 24;
     const hoursSinceSleep = this.rest?.hoursSinceSleep || 0;
     
-    // Apply Exhausted status if character hasn't slept 6 hours in the last 24 hours
+    // Apply Exhausted status if character has been awake for the sleep check interval
+    // without getting the required sleep hours (simplified check: awake for 24+ hours)
+    // Note: Full implementation would track sleep history to check "6 hours in last 24 hours"
     if (hoursSinceSleep >= sleepCheckInterval) {
-      const statusEffects = this.statusEffects || [];
-      if (!statusEffects.includes('Exhausted')) {
-        statusEffects.push('Exhausted');
+      if (!this.statusEffects) {
+        this.statusEffects = {};
       }
+      if (!this.statusEffects.exhausted) {
+        this.statusEffects.exhausted = { active: false };
+      }
+      this.statusEffects.exhausted.active = true;
     }
 
     // Initialize bonus totals for each ability
@@ -117,9 +169,10 @@ export default class BoilerplateCharacter extends BoilerplateActorBase {
       }
     }
 
-    // Apply status effect penalties
-    const statusEffects = this.statusEffects || [];
-    if (statusEffects.includes('Exhausted')) {
+    // Apply status effect penalties (only for active status effects)
+    const statusEffects = this.statusEffects || {};
+    const exhaustedStatus = statusEffects.exhausted;
+    if (exhaustedStatus && exhaustedStatus.active) {
       const exhaustedPenalty = CONFIG.VNV?.rules?.exhaustedPenalty || { smarts: -1, brawn: -1 };
       if (exhaustedPenalty.smarts && bonusTotals.hasOwnProperty('smarts')) {
         bonusTotals.smarts += exhaustedPenalty.smarts;
@@ -129,12 +182,54 @@ export default class BoilerplateCharacter extends BoilerplateActorBase {
       }
     }
 
+    // Apply vice penalties (only if not alleviated today)
+    // Note: Some vices have complex effects (exertion, initiative, stealth, etc.) 
+    // that need to be handled in specific game logic, not just ability penalties
+    const vices = this.vices || {};
+    for (const [viceKey, viceData] of Object.entries(vices)) {
+      if (viceData.has && !viceData.alleviated) {
+        const viceConfig = CONFIG.VNV?.vices?.[viceKey];
+        
+        // Parse common vice effects for ability penalties
+        if (viceConfig && viceConfig.effect) {
+          const effect = viceConfig.effect;
+          // Extract ability penalties from effect text
+          // Vices with ability penalties: Scaredy Cat (-2 Guts), Wuss (-2 Brawn), 
+          // Nervous (-2 Charm), Optimistic (-2 Smarts), Pessimistic (-1 Smarts),
+          // Overconfident (-1 Guts), Exhibitionist (-1 Brawn), Masochistic (-1 Charm),
+          // Avaricious (-1 Guts), Promiscuous (-1 Charm), Greedy (-1 Guts),
+          // Idiotic (-1 Smarts), Forgetful (-1 Brawn), Contrarian (-1 Charm)
+          if (effect.includes('-2 Guts') && bonusTotals.hasOwnProperty('guts')) {
+            bonusTotals.guts -= 2;
+          } else if (effect.includes('-1 Guts') && bonusTotals.hasOwnProperty('guts')) {
+            bonusTotals.guts -= 1;
+          }
+          if (effect.includes('-2 Brawn') && bonusTotals.hasOwnProperty('brawn')) {
+            bonusTotals.brawn -= 2;
+          } else if (effect.includes('-1 Brawn') && bonusTotals.hasOwnProperty('brawn')) {
+            bonusTotals.brawn -= 1;
+          }
+          if (effect.includes('-2 Charm') && bonusTotals.hasOwnProperty('charm')) {
+            bonusTotals.charm -= 2;
+          } else if (effect.includes('-1 Charm') && bonusTotals.hasOwnProperty('charm')) {
+            bonusTotals.charm -= 1;
+          }
+          if (effect.includes('-2 Smarts') && bonusTotals.hasOwnProperty('smarts')) {
+            bonusTotals.smarts -= 2;
+          } else if (effect.includes('-1 Smarts') && bonusTotals.hasOwnProperty('smarts')) {
+            bonusTotals.smarts -= 1;
+          }
+        }
+      }
+    }
+
     // Loop through ability scores, and add their modifiers to our sheet output.
     for (const key in this.abilities) {
       // Calculate total value (base value + sum of kin bonuses + status effects)
       const totalValue = this.abilities[key].value + bonusTotals[key];
-      // Calculate the modifier using d20 rules.
-      this.abilities[key].mod = Math.floor((totalValue - 10) / 2);
+      // In VNV, ability values range from -9 to 9, so the modifier is simply the total value itself
+      // (unlike D&D where modifiers are calculated from 1-20 ability scores)
+      this.abilities[key].mod = totalValue;
       this.abilities[key].total = totalValue;
       this.abilities[key].bonus = bonusTotals[key]; // Store total bonus for reference
       // Handle ability label localization.

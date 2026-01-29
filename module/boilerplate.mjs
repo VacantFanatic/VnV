@@ -6,7 +6,7 @@ import { BoilerplateActorSheet } from './sheets/actor-sheet.mjs';
 import { BoilerplateItemSheet } from './sheets/item-sheet.mjs';
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
-import { BOILERPLATE } from './helpers/config.mjs';
+import { VNV } from './helpers/config.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -22,14 +22,16 @@ Hooks.once('init', function () {
   };
 
   // Add custom constants for configuration.
-  CONFIG.BOILERPLATE = BOILERPLATE;
+  CONFIG.VNV = VNV;
 
   /**
    * Set an initiative formula for the system
+   * Uses the initiativeDie from VNV.rules config (defaults to "d6")
    * @type {String}
    */
+  const initiativeDie = CONFIG.VNV?.rules?.initiativeDie || "d6";
   CONFIG.Combat.initiative = {
-    formula: '1d20 + @abilities.dex.mod',
+    formula: `${initiativeDie} + @abilities.guts.mod`,
     decimals: 2,
   };
 

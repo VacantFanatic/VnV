@@ -28,10 +28,12 @@ Hooks.once('init', function () {
 
   /**
    * Set an initiative formula for the system
+   * Uses the initiativeDie from VNV.rules config (defaults to "d6")
    * @type {String}
    */
+  const initiativeDie = CONFIG.VNV?.rules?.initiativeDie || "d6";
   CONFIG.Combat.initiative = {
-    formula: '1d20 + @abilities.guts.mod',
+    formula: `${initiativeDie} + @abilities.guts.mod`,
     decimals: 2,
   };
 

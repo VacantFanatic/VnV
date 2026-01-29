@@ -8,7 +8,7 @@
       {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
       use both the "grid" and "grid-Ncol" class where "N" can be any number
       from 1 to 12 and will create that number of columns.  --}}
-      <div class="resources grid grid-3col">
+      <div class="resources grid grid-4col">
 
         {{!-- "flex-group-center" is also defined in the _grid.scss file
         and it will add a small amount of padding, a border, and will
@@ -23,11 +23,20 @@
         </div>
 
         <div class="resource flex-group-center">
-          <label for="system.power.value" class="resource-label">Power</label>
+          <label for="system.motes.value" class="resource-label">Motes</label>
           <div class="resource-content flexrow flex-center flex-between">
-          <input type="text" name="system.power.value" value="{{system.power.value}}" data-dtype="Number"/>
+          <input type="text" name="system.motes.value" value="{{system.motes.value}}" data-dtype="Number"/>
           <span> / </span>
-          <input type="text" name="system.power.max" value="{{system.power.max}}" data-dtype="Number"/>
+          <input type="text" name="system.motes.max" value="{{system.motes.max}}" data-dtype="Number"/>
+          </div>
+        </div>
+
+        <div class="resource flex-group-center">
+          <label for="system.exertion.value" class="resource-label">Exertion</label>
+          <div class="resource-content flexrow flex-center flex-between">
+          <input type="text" name="system.exertion.value" value="{{system.exertion.value}}" data-dtype="Number"/>
+          <span> / </span>
+          <input type="text" name="system.exertion.max" value="{{system.exertion.max}}" data-dtype="Number"/>
           </div>
         </div>
 
@@ -39,6 +48,50 @@
         </div>
 
       </div>
+      
+      {{!-- Character Info Section --}}
+      <div class="character-info grid grid-4col">
+        <div class="flex-group-center">
+          <label for="system.kin" class="resource-label">Kin</label>
+          <input type="text" name="system.kin" value="{{system.kin}}" placeholder=""/>
+        </div>
+        <div class="flex-group-center">
+          <label for="system.trait" class="resource-label">Trait</label>
+          <input type="text" name="system.trait" value="{{system.trait}}" placeholder=""/>
+        </div>
+        <div class="flex-group-center">
+          <label for="system.trinket" class="resource-label">Trinket</label>
+          <input type="text" name="system.trinket" value="{{system.trinket}}" placeholder=""/>
+        </div>
+        <div class="flex-group-center">
+          <label for="system.background" class="resource-label">Background</label>
+          <input type="text" name="system.background" value="{{system.background}}" placeholder=""/>
+        </div>
+      </div>
+      
+      {{!-- Classes and Additional Info --}}
+      <div class="character-info grid grid-3col">
+        <div class="flex-group-center">
+          <label class="resource-label">Classes</label>
+          <div class="resource-content">
+            {{#each system.classes as |class idx|}}
+            <div class="flexrow">
+              <input type="text" name="system.classes.{{idx}}" value="{{class}}" placeholder="Class Name" data-dtype="String"/>
+            </div>
+            {{/each}}
+            <button type="button" class="add-class" data-action="add-class">+ Add Class</button>
+          </div>
+        </div>
+        <div class="flex-group-center">
+          <label for="system.refractoryPeriod" class="resource-label">Refractory Period (min)</label>
+          <input type="text" name="system.refractoryPeriod" value="{{system.refractoryPeriod}}" data-dtype="Number"/>
+        </div>
+        <div class="flex-group-center">
+          <label for="system.currency.value" class="resource-label">Currency</label>
+          <input type="text" name="system.currency.value" value="{{system.currency.value}}" data-dtype="Number"/>
+        </div>
+      </div>
+      
     </div>
   </header>
 
@@ -49,6 +102,7 @@
     <a class="item" data-tab="description">Description</a>
     <a class="item" data-tab="items">Items</a>
     <a class="item" data-tab="spells">Spells</a>
+    <a class="item" data-tab="status-vices">Status & Vices</a>
     <a class="item" data-tab="effects">Effects</a>
   </nav>
 
@@ -64,20 +118,56 @@
           use both the "grid" and "grid-Ncol" class where "N" can be any number
           from 1 to 12 and will create that number of columns.  --}}
           <div class="abilities flexcol">
-            {{#each system.abilities as |ability key|}}
+            {{#each config.abilities as |label key|}}
+            {{#if (lookup ../system.abilities key)}}
+            {{#with (lookup ../system.abilities key) as |ability|}}
             <div class="ability flexrow flex-group-center">
-              <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="d20+@abilities.{{key}}.mod" data-label="{{localize (lookup @root.config.abilities key)}}">{{localize (lookup @root.config.abilities key)}}</label>
+              <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="d20+@abilities.{{key}}.mod" data-label="{{localize ../label}}">{{localize ../label}}</label>
               <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
-              <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{localize (lookup @root.config.abilities key)}}">{{numberFormat ability.mod decimals=0 sign=true}}</span>
+              <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{localize ../label}}">{{numberFormat ability.mod decimals=0 sign=true}}</span>
             </div>
+            {{/with}}
+            {{else}}
+            <div class="ability flexrow flex-group-center">
+              <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="d20+@abilities.{{key}}.mod" data-label="{{localize label}}">{{localize label}}</label>
+              <input type="text" name="system.abilities.{{key}}.value" value="0" data-dtype="Number"/>
+              <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{localize label}}">0</span>
+            </div>
+            {{/if}}
             {{/each}}
+          </div>
+          
+          {{!-- Combat Actions --}}
+          <div class="combat-actions flexcol">
+            <h3 class="resource-label">Combat Actions</h3>
+            <div class="flexrow flex-group-center">
+              <label>Combat Actions:</label>
+              <span>{{system.actions.combatActions}} (Used: {{system.actions.usedCombatActions}})</span>
+            </div>
+            <div class="flexrow flex-group-center">
+              <label>Tactical Actions:</label>
+              <span>{{system.actions.tacticalActions}} (Used: {{system.actions.usedTacticalActions}})</span>
+            </div>
+          </div>
+          
+          {{!-- Rest/Sleep Tracking --}}
+          <div class="rest-tracking flexcol">
+            <h3 class="resource-label">Rest & Sleep</h3>
+            <div class="flexrow flex-group-center">
+              <label for="system.rest.hoursSinceSleep">Hours Since Sleep:</label>
+              <input type="text" name="system.rest.hoursSinceSleep" value="{{system.rest.hoursSinceSleep}}" data-dtype="Number" style="width: 60px;"/>
+            </div>
+            <div class="flexrow flex-group-center">
+              <label for="system.rest.exertionRegained">Exertion Regained:</label>
+              <input type="checkbox" name="system.rest.exertionRegained" {{checked system.rest.exertionRegained}}/>
+            </div>
           </div>
         </aside>
 
         {{!-- For the main features list, span the right two columns --}}
         <section class="main grid-span-2">
           {{!-- This is a Handlebars partial. They're stored in the `/parts` folder next to this sheet, and defined in module/helpers/templates.mjs --}}
-          {{> "systems/boilerplate/templates/actor/parts/actor-features.hbs"}}
+          {{> "systems/VnV/templates/actor/parts/actor-features.hbs"}}
         </section>
 
       </section>
@@ -91,17 +181,22 @@
 
     {{!-- Owned Items Tab --}}
     <div class="tab items" data-group="primary" data-tab="items">
-       {{> "systems/boilerplate/templates/actor/parts/actor-items.hbs"}}
+       {{> "systems/VnV/templates/actor/parts/actor-items.hbs"}}
     </div>
 
     {{!-- Owned Spells Tab --}}
     <div class="tab spells" data-group="primary" data-tab="spells">
-      {{> "systems/boilerplate/templates/actor/parts/actor-spells.hbs"}}
+      {{> "systems/VnV/templates/actor/parts/actor-spells.hbs"}}
+    </div>
+
+    {{!-- Status & Vices Tab --}}
+    <div class="tab status-vices flexcol" data-group="primary" data-tab="status-vices">
+      {{> "systems/VnV/templates/actor/parts/actor-status-vices.hbs"}}
     </div>
 
     {{!-- Active Effects Tab --}}
     <div class="tab effects flexcol" data-group="primary" data-tab="effects">
-      {{> "systems/boilerplate/templates/actor/parts/actor-effects.hbs"}}
+      {{> "systems/VnV/templates/actor/parts/actor-effects.hbs"}}
     </div>
 
   </section>

@@ -26,7 +26,7 @@ export class BoilerplateActorSheet extends ActorSheet {
 
   /** @override */
   get template() {
-    return `systems/boilerplate/templates/actor/actor-${this.actor.type}-sheet.hbs`;
+    return `systems/VnV/templates/actor/actor-${this.actor.type}-sheet.hbs`;
   }
 
   /* -------------------------------------------- */
@@ -43,11 +43,12 @@ export class BoilerplateActorSheet extends ActorSheet {
     const actorData = this.document.toObject(false);
 
     // Add the actor's data to context.data for easier access, as well as flags.
-    context.system = actorData.system;
+    // Use the actor's system data directly (which includes prepared derived data)
+    context.system = this.actor.system;
     context.flags = actorData.flags;
 
-    // Adding a pointer to CONFIG.BOILERPLATE
-    context.config = CONFIG.BOILERPLATE;
+    // Adding a pointer to CONFIG.VNV
+    context.config = CONFIG.VNV;
 
     // Prepare character data and items.
     if (actorData.type == 'character') {
