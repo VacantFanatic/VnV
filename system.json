@@ -22,11 +22,25 @@
   ],
   "version": "0.1.0",
   "compatibility": {
-    "minimum": 11,
-    "verified": "11.315"
+    "minimum": "13.0.0",
+    "verified": "13.351"
   },
-  "esmodules": ["module/boilerplate.mjs"],
-  "styles": ["css/boilerplate.css"],
+  "documentTypes": {
+    "Actor": {
+      "character": {},
+      "npc": {}
+    },
+    "Item": {
+      "item": {},
+      "feature": {},
+      "spell": {},
+      "class": {},
+      "ability": {},
+      "kin": {}
+    }
+  },
+  "esmodules": ["module/vnv.mjs"],
+  "styles": ["css/vnv.css"],
   "languages": [
     {
       "lang": "en",

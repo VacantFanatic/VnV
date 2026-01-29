@@ -4,19 +4,22 @@
   {{!-- Status Effects Section --}}
   <div class="status-effects-section">
     <h3 class="resource-label">Status Effects</h3>
-    <div class="status-list flexcol">
+    <div class="status-list grid grid-3col">
       {{#each config.statusEffects as |status key|}}
+      {{!-- Skip downed as it's displayed in the header --}}
+      {{#unless (eq key "downed")}}
       {{#with (lookup ../system.statusEffects key) as |actorStatus|}}
       <div class="status-item flexrow flex-group-center">
         <input type="checkbox" name="system.statusEffects.{{key}}.active" {{checked actorStatus.active}} title="Active"/>
-        <label class="status-name">{{localize status.label}}</label>
+        <label class="status-name">{{status.label}}</label>
       </div>
       {{else}}
       <div class="status-item flexrow flex-group-center">
         <input type="checkbox" name="system.statusEffects.{{key}}.active" title="Active"/>
-        <label class="status-name">{{localize status.label}}</label>
+        <label class="status-name">{{status.label}}</label>
       </div>
       {{/with}}
+      {{/unless}}
       {{/each}}
     </div>
   </div>
@@ -24,7 +27,7 @@
   {{!-- Vices Section --}}
   <div class="vices-section">
     <h3 class="resource-label">Vices</h3>
-    <div class="vices-list flexcol">
+    <div class="vices-list grid grid-3col">
       {{#each config.vices as |vice key|}}
       {{#with (lookup ../system.vices key) as |actorVice|}}
       <div class="vice-item flexrow flex-group-center">

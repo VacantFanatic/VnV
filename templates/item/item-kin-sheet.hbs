@@ -1,0 +1,72 @@
+<form class="{{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
+    </div>
+  </header>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">Description</a>
+    <a class="item" data-tab="attributes">Attributes</a>
+    <a class="item" data-tab="effects">Effects</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+
+    {{!-- Description Tab --}}
+    <div class="tab" data-group="primary" data-tab="description">
+      {{!-- Editors must receive enriched text data from getData to properly handle rolls --}}
+      {{editor enrichedDescription target="system.description" engine="prosemirror" button=true editable=editable}}
+    </div>
+
+    {{!-- Attributes Tab --}}
+    <div class="tab attributes" data-group="primary" data-tab="attributes">
+      <h3 class="resource-label">Ability Bonuses</h3>
+      <div class="ability-bonuses">
+        {{#each system.abilityBonuses as |bonus idx|}}
+        <div class="ability-bonus flexrow flex-group-center" data-index="{{idx}}">
+          <select name="system.abilityBonuses.{{idx}}.ability" data-dtype="String">
+            {{#select bonus.ability}}
+            <option value="smarts">{{localize 'VNV.Ability.Smarts.long'}}</option>
+            <option value="brawn">{{localize 'VNV.Ability.Brawn.long'}}</option>
+            <option value="guts">{{localize 'VNV.Ability.Guts.long'}}</option>
+            <option value="charm">{{localize 'VNV.Ability.Charm.long'}}</option>
+            {{/select}}
+          </select>
+          <input type="number" name="system.abilityBonuses.{{idx}}.value" value="{{bonus.value}}" data-dtype="Number" min="-9" max="9"/>
+          <a class="ability-bonus-delete" data-index="{{idx}}" title="Remove Bonus">
+            <i class="fas fa-trash"></i>
+          </a>
+        </div>
+        {{/each}}
+        <a class="ability-bonus-add" title="Add Ability Bonus">
+          <i class="fas fa-plus"></i> Add Bonus
+        </a>
+      </div>
+
+      <h3 class="resource-label" style="margin-top: 10px;">Trait List</h3>
+      <div class="trait-list">
+        {{#each system.traitList as |trait idx|}}
+        <div class="trait-item flexrow flex-group-center" data-index="{{idx}}">
+          <input type="text" name="system.traitList.{{idx}}" value="{{trait}}" placeholder="Enter trait..."/>
+          <a class="trait-delete" data-index="{{idx}}" title="Remove Trait">
+            <i class="fas fa-trash"></i>
+          </a>
+        </div>
+        {{/each}}
+        <a class="trait-add" title="Add Trait">
+          <i class="fas fa-plus"></i> Add Trait
+        </a>
+      </div>
+    </div>
+
+    {{!-- Effects Tab --}}
+    <div class="tab effects" data-group="primary" data-tab="effects">
+      {{> "systems/VnV/templates/item/parts/item-effects.hbs"}}
+    </div>
+  </section>
+
+</form>

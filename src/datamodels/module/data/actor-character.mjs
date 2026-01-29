@@ -1,6 +1,6 @@
-import BoilerplateActorBase from "./base-actor.mjs";
+import VnVActorBase from "./base-actor.mjs";
 
-export default class BoilerplateCharacter extends BoilerplateActorBase {
+export default class VnVCharacter extends VnVActorBase {
 
   static defineSchema() {
     const fields = foundry.data.fields;
@@ -48,6 +48,9 @@ export default class BoilerplateCharacter extends BoilerplateActorBase {
 
     // Refractory Period - time before character can have Sex again (in minutes)
     schema.refractoryPeriod = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
+
+    // Number of sexual partners
+    schema.sexualPartners = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 });
 
     // Currency/Money
     schema.currency = new fields.SchemaField({
@@ -127,6 +130,12 @@ export default class BoilerplateCharacter extends BoilerplateActorBase {
       exertionRegained: new fields.BooleanField({ initial: false })
     });
 
+    // Downed tracking - 3 rounds, then death
+    // rounds: 0 = not downed, 1-3 = rounds downed (3 = death)
+    schema.downed = new fields.SchemaField({
+      rounds: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0, max: 3 })
+    });
+
     return schema;
   }
 
@@ -134,6 +143,19 @@ export default class BoilerplateCharacter extends BoilerplateActorBase {
     // Clamp level between 0 and 10
     const level = Math.max(0, Math.min(10, this.attributes.level.value || 0));
     this.attributes.level.value = level;
+
+    // Handle downed status - if 3 rounds, character is dead
+    const downedRounds = this.downed?.rounds || 0;
+    if (downedRounds >= 3) {
+      // Automatically set Dead status when downed for 3 rounds
+      if (!this.statusEffects) {
+        this.statusEffects = {};
+      }
+      if (!this.statusEffects.dead) {
+        this.statusEffects.dead = { active: false };
+      }
+      this.statusEffects.dead.active = true;
+    }
 
     // Check for Exhausted status based on sleep tracking
     // Characters need 6 hours of sleep every 24 hours or become Exhausted

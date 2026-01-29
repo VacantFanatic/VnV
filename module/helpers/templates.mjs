@@ -8,6 +8,7 @@ export const preloadHandlebarsTemplates = async function () {
     // Actor partials.
     'systems/VnV/templates/actor/parts/actor-features.hbs',
     'systems/VnV/templates/actor/parts/actor-items.hbs',
+    'systems/VnV/templates/actor/parts/actor-classes.hbs',
     'systems/VnV/templates/actor/parts/actor-spells.hbs',
     'systems/VnV/templates/actor/parts/actor-status-vices.hbs',
     'systems/VnV/templates/actor/parts/actor-effects.hbs',

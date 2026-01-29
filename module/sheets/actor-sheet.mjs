@@ -7,11 +7,11 @@ import {
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class BoilerplateActorSheet extends ActorSheet {
+export class VnVActorSheet extends ActorSheet {
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ['boilerplate', 'sheet', 'actor'],
+      classes: ['vnv', 'sheet', 'actor'],
       width: 600,
       height: 600,
       tabs: [
@@ -47,8 +47,85 @@ export class BoilerplateActorSheet extends ActorSheet {
     context.system = this.actor.system;
     context.flags = actorData.flags;
 
-    // Adding a pointer to CONFIG.VNV
-    context.config = CONFIG.VNV;
+    // Adding a pointer to CONFIG.VNV, but create a copy to avoid mutating the original
+    context.config = foundry.utils?.deepClone ? foundry.utils.deepClone(CONFIG.VNV) : JSON.parse(JSON.stringify(CONFIG.VNV));
+    
+    // Ensure game.i18n is available
+    if (!game.i18n) {
+      console.warn('VnV System: game.i18n not available during getData()');
+      return context;
+    }
+    
+    // Pre-localize ability labels for template use
+    if (context.config && context.config.abilities) {
+      const localizedAbilities = {};
+      for (const [key, locKey] of Object.entries(context.config.abilities)) {
+        // locKey is already a localization key string like 'VNV.Ability.Smarts.long'
+        try {
+          // Try direct translation first
+          let localized = game.i18n.localize(locKey);
+          
+          // If localization returns the same key, manually traverse translations
+          if (localized === locKey && game.i18n.translations) {
+            const translations = game.i18n.translations;
+            const keyParts = locKey.split('.');
+            let value = translations;
+            for (const part of keyParts) {
+              if (value && typeof value === 'object' && part in value) {
+                value = value[part];
+              } else {
+                value = null;
+                break;
+              }
+            }
+            localized = (typeof value === 'string') ? value : locKey;
+          }
+          
+          localizedAbilities[key] = localized;
+        } catch (e) {
+          console.error(`VnV System: Failed to localize ${locKey}:`, e);
+          localizedAbilities[key] = locKey;
+        }
+      }
+      // Replace the abilities object with localized versions
+      context.config.abilities = localizedAbilities;
+    }
+    
+    // Pre-localize status effect labels
+    if (context.config && context.config.statusEffects) {
+      const localizedStatusEffects = {};
+      for (const [key, status] of Object.entries(context.config.statusEffects)) {
+        try {
+          localizedStatusEffects[key] = {
+            ...status,
+            label: status.label ? game.i18n.localize(status.label) : status.label,
+            description: status.description ? game.i18n.localize(status.description) : status.description
+          };
+        } catch (e) {
+          console.warn(`VnV System: Failed to localize status ${key}:`, e);
+          localizedStatusEffects[key] = status;
+        }
+      }
+      context.config.statusEffects = localizedStatusEffects;
+    }
+    
+    // Pre-localize vice names
+    if (context.config && context.config.vices) {
+      const localizedVices = {};
+      for (const [key, vice] of Object.entries(context.config.vices)) {
+        try {
+          localizedVices[key] = {
+            ...vice,
+            name: vice.label ? game.i18n.localize(vice.label) : vice.name,
+            label: vice.label ? game.i18n.localize(vice.label) : vice.label
+          };
+        } catch (e) {
+          console.warn(`VnV System: Failed to localize vice ${key}:`, e);
+          localizedVices[key] = vice;
+        }
+      }
+      context.config.vices = localizedVices;
+    }
 
     // Prepare character data and items.
     if (actorData.type == 'character') {
@@ -106,18 +183,9 @@ export class BoilerplateActorSheet extends ActorSheet {
     // Initialize containers.
     const gear = [];
     const features = [];
-    const spells = {
-      0: [],
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-      5: [],
-      6: [],
-      7: [],
-      8: [],
-      9: [],
-    };
+    const classes = [];
+    const abilities = [];
+    const spells = [];
 
     // Iterate through items, allocating to containers
     for (let i of context.items) {
@@ -130,17 +198,40 @@ export class BoilerplateActorSheet extends ActorSheet {
       else if (i.type === 'feature') {
         features.push(i);
       }
-      // Append to spells.
+      // Append to classes.
+      else if (i.type === 'class') {
+        classes.push(i);
+      }
+      // Append to abilities.
+      else if (i.type === 'ability') {
+        abilities.push(i);
+      }
+      // Append to spells (no longer organized by level).
       else if (i.type === 'spell') {
-        if (i.system.spellLevel != undefined) {
-          spells[i.system.spellLevel].push(i);
-        }
+        // Add a display label for the spell type using localization
+        const typeKey = i.system.type === 'basic' ? 'VNV.Item.Spell.TypeBasic' : 'VNV.Item.Spell.TypeAdvanced';
+        i.typeLabel = game.i18n.localize(typeKey);
+        spells.push(i);
       }
     }
+
+    // Organize abilities by their parent class
+    const classesWithAbilities = classes.map(classItem => {
+      const classAbilities = abilities.filter(ability => {
+        // Check if ability's parentClassId matches this class's ID
+        return ability.system?.parentClassId === classItem._id;
+      });
+      return {
+        ...classItem,
+        abilities: classAbilities
+      };
+    });
 
     // Assign and return
     context.gear = gear;
     context.features = features;
+    context.classes = classesWithAbilities;
+    context.abilities = abilities;
     context.spells = spells;
   }
 
@@ -185,6 +276,28 @@ export class BoilerplateActorSheet extends ActorSheet {
     // Rollable abilities.
     html.on('click', '.rollable', this._onRoll.bind(this));
 
+    // Downed skull controls - clicking a skull sets rounds to that value
+    html.on('click', '.downed-skull', async (ev) => {
+      ev.preventDefault();
+      const round = parseInt(ev.currentTarget.dataset.round);
+      const currentRounds = this.actor.system.downed?.rounds || 0;
+      // If clicking the same round, reset to 0; otherwise set to that round
+      const newRounds = (currentRounds === round) ? 0 : round;
+      await this.actor.update({ 'system.downed.rounds': newRounds });
+      this.render(false);
+    });
+
+    // Chip delete buttons - remove kin or background
+    html.on('click', '.chip-delete', async (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const field = ev.currentTarget.dataset.field;
+      if (field === 'kin' || field === 'background') {
+        await this.actor.update({ [`system.${field}`]: '' });
+        this.render(false);
+      }
+    });
+
     // Drag events for macros.
     if (this.actor.isOwner) {
       let handler = (ev) => this._onDragStart(ev);
@@ -219,7 +332,12 @@ export class BoilerplateActorSheet extends ActorSheet {
     // Remove the type from the dataset since it's in the itemData.type prop.
     delete itemData.system['type'];
 
-    // Finally, create the item!
+    // If creating an ability with a parent class, store the parent class ID
+    if (type === 'ability' && header.dataset.parentId) {
+      itemData.system.parentClassId = header.dataset.parentId;
+    }
+
+    // Finally, create the item! (Items are always owned by the actor)
     return await Item.create(itemData, { parent: this.actor });
   }
 
@@ -253,5 +371,59 @@ export class BoilerplateActorSheet extends ActorSheet {
       });
       return roll;
     }
+  }
+
+  /**
+   * Handle dropping an item on the actor sheet.
+   * Special handling for kin items: update character's kin, apply bonuses, and generate trait.
+   * @param {Event} event   The originating drop event
+   * @param {Object} data   The dropped data
+   * @private
+   */
+  async _onDropItemData(event, data) {
+    // Only handle kin items for character actors
+    if (this.actor.type !== 'character') {
+      return super._onDropItemData(event, data);
+    }
+
+    // Get the item from the drop data
+    const item = await Item.fromDropData(data);
+    
+    // Check if it's a kin item
+    if (item && item.type === 'kin') {
+      event.preventDefault();
+      
+      // Prepare update data
+      const updateData = {};
+      
+      // Update the character's kin field
+      updateData['system.kin'] = item.name;
+      
+      // Apply ability bonuses from the kin item
+      if (item.system.abilityBonuses && item.system.abilityBonuses.length > 0) {
+        updateData['system.kinBonuses'] = item.system.abilityBonuses.map(bonus => ({
+          ability: bonus.ability,
+          value: bonus.value
+        }));
+      }
+      
+      // Generate a random trait from the trait list
+      if (item.system.traitList && item.system.traitList.length > 0) {
+        const randomTrait = item.system.traitList[Math.floor(Math.random() * item.system.traitList.length)];
+        updateData['system.trait'] = randomTrait;
+      }
+      
+      // Update the actor
+      await this.actor.update(updateData);
+      
+      // Show notification
+      ui.notifications.info(`Applied ${item.name} kin: Updated abilities and generated trait.`);
+      
+      // Don't add the kin item to the actor's inventory (it's just a template)
+      return false;
+    }
+    
+    // For all other items, use default behavior
+    return super._onDropItemData(event, data);
   }
 }

@@ -1,3 +1,3 @@
-import BoilerplateItemBase from "./base-item.mjs";
+import VnVItemBase from "./base-item.mjs";
 
-export default class BoilerplateFeature extends BoilerplateItemBase {}
+export default class VnVFeature extends VnVItemBase {}

@@ -1,8 +1,12 @@
 /**
- * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
+ * Extend the base Actor document by defining a custom roll data structure which is ideal for the VnV system.
  * @extends {Actor}
  */
-export class BoilerplateActor extends Actor {
+export class VnVActor extends Actor {
+  /** @override */
+  static get defaultType() {
+    return 'character';
+  }
   /** @override */
   prepareData() {
     // Prepare data for the actor. Calling the super version of this executes
@@ -30,7 +34,7 @@ export class BoilerplateActor extends Actor {
   prepareDerivedData() {
     const actorData = this;
     const systemData = actorData.system;
-    const flags = actorData.flags.boilerplate || {};
+    const flags = actorData.flags.vnv || {};
 
     // Make separate methods for each Actor type (character, npc, etc.) to keep
     // things organized.

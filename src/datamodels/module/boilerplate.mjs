@@ -1,9 +1,9 @@
 // Import document classes.
-import { BoilerplateActor } from './documents/actor.mjs';
-import { BoilerplateItem } from './documents/item.mjs';
+import { VnVActor } from './documents/actor.mjs';
+import { VnVItem } from './documents/item.mjs';
 // Import sheet classes.
-import { BoilerplateActorSheet } from './sheets/actor-sheet.mjs';
-import { BoilerplateItemSheet } from './sheets/item-sheet.mjs';
+import { VnVActorSheet } from './sheets/actor-sheet.mjs';
+import { VnVItemSheet } from './sheets/item-sheet.mjs';
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { VNV } from './helpers/config.mjs';
@@ -17,9 +17,9 @@ import * as models from './data/_module.mjs';
 Hooks.once('init', function () {
   // Add utility classes to the global game object so that they're more easily
   // accessible in global contexts.
-  game.boilerplate = {
-    BoilerplateActor,
-    BoilerplateItem,
+  game.vnv = {
+    VnVActor,
+    VnVItem,
     rollItemMacro,
   };
 
@@ -38,20 +38,20 @@ Hooks.once('init', function () {
   };
 
   // Define custom Document and DataModel classes
-  CONFIG.Actor.documentClass = BoilerplateActor;
+  CONFIG.Actor.documentClass = VnVActor;
 
   // Note that you don't need to declare a DataModel
   // for the base actor/item classes - they are included
   // with the Character/NPC as part of super.defineSchema()
   CONFIG.Actor.dataModels = {
-    character: models.BoilerplateCharacter,
-    npc: models.BoilerplateNPC
+    character: models.VnVCharacter,
+    npc: models.VnVNPC
   }
-  CONFIG.Item.documentClass = BoilerplateItem;
+  CONFIG.Item.documentClass = VnVItem;
   CONFIG.Item.dataModels = {
-    item: models.BoilerplateItem,
-    feature: models.BoilerplateFeature,
-    spell: models.BoilerplateSpell
+    item: models.VnVItem,
+    feature: models.VnVFeature,
+    spell: models.VnVSpell
   }
 
   // Active Effects are never copied to the Actor,
@@ -61,14 +61,14 @@ Hooks.once('init', function () {
 
   // Register sheet application classes
   Actors.unregisterSheet('core', ActorSheet);
-  Actors.registerSheet('boilerplate', BoilerplateActorSheet, {
+  Actors.registerSheet('VnV', VnVActorSheet, {
     makeDefault: true,
-    label: 'BOILERPLATE.SheetLabels.Actor',
+    label: 'VNV.SheetLabels.Actor',
   });
   Items.unregisterSheet('core', ItemSheet);
-  Items.registerSheet('boilerplate', BoilerplateItemSheet, {
+  Items.registerSheet('VnV', VnVItemSheet, {
     makeDefault: true,
-    label: 'BOILERPLATE.SheetLabels.Item',
+    label: 'VNV.SheetLabels.Item',
   });
 
   // Preload Handlebars templates.

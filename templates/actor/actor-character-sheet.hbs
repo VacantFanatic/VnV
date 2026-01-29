@@ -49,46 +49,66 @@
 
       </div>
       
+      {{!-- Downed Section --}}
+      <div class="downed-section flex-group-center">
+        <label class="resource-label">Downed</label>
+        <div class="downed-skulls flexrow flex-center">
+          <i class="fas fa-skull downed-skull {{#if (gte system.downed.rounds 1)}}active{{/if}}" data-round="1" title="Round 1"></i>
+          <i class="fas fa-skull downed-skull {{#if (gte system.downed.rounds 2)}}active{{/if}}" data-round="2" title="Round 2"></i>
+          <i class="fas fa-skull downed-skull {{#if (gte system.downed.rounds 3)}}active{{/if}}" data-round="3" title="Round 3 (Death)"></i>
+          <input type="hidden" name="system.downed.rounds" value="{{system.downed.rounds}}" data-dtype="Number"/>
+        </div>
+      </div>
+      
       {{!-- Character Info Section --}}
-      <div class="character-info grid grid-4col">
+      <div class="character-info grid grid-3col">
         <div class="flex-group-center">
-          <label for="system.kin" class="resource-label">Kin</label>
-          <input type="text" name="system.kin" value="{{system.kin}}" placeholder=""/>
+          <label class="resource-label">Kin</label>
+          <div class="drop-zone" data-drop-type="kin">
+            {{#if system.kin}}
+            <div class="chip">
+              <span class="chip-text">{{system.kin}}</span>
+              <a class="chip-delete" data-field="kin" title="Remove">
+                <i class="fas fa-times"></i>
+              </a>
+            </div>
+            {{else}}
+            <div class="drop-zone-placeholder">Drop Kin here</div>
+            {{/if}}
+            <input type="hidden" name="system.kin" value="{{system.kin}}" data-dtype="String"/>
+          </div>
         </div>
         <div class="flex-group-center">
           <label for="system.trait" class="resource-label">Trait</label>
           <input type="text" name="system.trait" value="{{system.trait}}" placeholder=""/>
         </div>
         <div class="flex-group-center">
-          <label for="system.trinket" class="resource-label">Trinket</label>
-          <input type="text" name="system.trinket" value="{{system.trinket}}" placeholder=""/>
-        </div>
-        <div class="flex-group-center">
-          <label for="system.background" class="resource-label">Background</label>
-          <input type="text" name="system.background" value="{{system.background}}" placeholder=""/>
+          <label class="resource-label">Background</label>
+          <div class="drop-zone" data-drop-type="background">
+            {{#if system.background}}
+            <div class="chip">
+              <span class="chip-text">{{system.background}}</span>
+              <a class="chip-delete" data-field="background" title="Remove">
+                <i class="fas fa-times"></i>
+              </a>
+            </div>
+            {{else}}
+            <div class="drop-zone-placeholder">Drop Background here</div>
+            {{/if}}
+            <input type="hidden" name="system.background" value="{{system.background}}" data-dtype="String"/>
+          </div>
         </div>
       </div>
       
-      {{!-- Classes and Additional Info --}}
-      <div class="character-info grid grid-3col">
-        <div class="flex-group-center">
-          <label class="resource-label">Classes</label>
-          <div class="resource-content">
-            {{#each system.classes as |class idx|}}
-            <div class="flexrow">
-              <input type="text" name="system.classes.{{idx}}" value="{{class}}" placeholder="Class Name" data-dtype="String"/>
-            </div>
-            {{/each}}
-            <button type="button" class="add-class" data-action="add-class">+ Add Class</button>
-          </div>
-        </div>
+      {{!-- Additional Info --}}
+      <div class="character-info grid grid-2col">
         <div class="flex-group-center">
           <label for="system.refractoryPeriod" class="resource-label">Refractory Period (min)</label>
           <input type="text" name="system.refractoryPeriod" value="{{system.refractoryPeriod}}" data-dtype="Number"/>
         </div>
         <div class="flex-group-center">
-          <label for="system.currency.value" class="resource-label">Currency</label>
-          <input type="text" name="system.currency.value" value="{{system.currency.value}}" data-dtype="Number"/>
+          <label for="system.sexualPartners" class="resource-label">Number of Sexual Partners</label>
+          <input type="text" name="system.sexualPartners" value="{{system.sexualPartners}}" data-dtype="Number"/>
         </div>
       </div>
       
@@ -99,11 +119,10 @@
   <nav class="sheet-tabs tabs" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}
     <a class="item" data-tab="features">Features</a>
-    <a class="item" data-tab="description">Description</a>
-    <a class="item" data-tab="items">Items</a>
+    <a class="item" data-tab="items">Inventory</a>
     <a class="item" data-tab="spells">Spells</a>
     <a class="item" data-tab="status-vices">Status & Vices</a>
-    <a class="item" data-tab="effects">Effects</a>
+    <a class="item" data-tab="description">Description</a>
   </nav>
 
   {{!-- Sheet Body --}}
@@ -122,16 +141,14 @@
             {{#if (lookup ../system.abilities key)}}
             {{#with (lookup ../system.abilities key) as |ability|}}
             <div class="ability flexrow flex-group-center">
-              <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="d20+@abilities.{{key}}.mod" data-label="{{localize ../label}}">{{localize ../label}}</label>
+              <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="d20+@abilities.{{key}}.value" data-label="{{label}}">{{label}}</label>
               <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
-              <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{localize ../label}}">{{numberFormat ability.mod decimals=0 sign=true}}</span>
             </div>
             {{/with}}
             {{else}}
             <div class="ability flexrow flex-group-center">
-              <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="d20+@abilities.{{key}}.mod" data-label="{{localize label}}">{{localize label}}</label>
+              <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="d20+@abilities.{{key}}.value" data-label="{{label}}">{{label}}</label>
               <input type="text" name="system.abilities.{{key}}.value" value="0" data-dtype="Number"/>
-              <span class="ability-mod rollable" data-roll="d20+@abilities.{{key}}.mod" data-label="{{localize label}}">0</span>
             </div>
             {{/if}}
             {{/each}}
@@ -149,38 +166,23 @@
               <span>{{system.actions.tacticalActions}} (Used: {{system.actions.usedTacticalActions}})</span>
             </div>
           </div>
-          
-          {{!-- Rest/Sleep Tracking --}}
-          <div class="rest-tracking flexcol">
-            <h3 class="resource-label">Rest & Sleep</h3>
-            <div class="flexrow flex-group-center">
-              <label for="system.rest.hoursSinceSleep">Hours Since Sleep:</label>
-              <input type="text" name="system.rest.hoursSinceSleep" value="{{system.rest.hoursSinceSleep}}" data-dtype="Number" style="width: 60px;"/>
-            </div>
-            <div class="flexrow flex-group-center">
-              <label for="system.rest.exertionRegained">Exertion Regained:</label>
-              <input type="checkbox" name="system.rest.exertionRegained" {{checked system.rest.exertionRegained}}/>
-            </div>
-          </div>
         </aside>
 
-        {{!-- For the main features list, span the right two columns --}}
+        {{!-- For the main classes list, span the right two columns --}}
         <section class="main grid-span-2">
           {{!-- This is a Handlebars partial. They're stored in the `/parts` folder next to this sheet, and defined in module/helpers/templates.mjs --}}
-          {{> "systems/VnV/templates/actor/parts/actor-features.hbs"}}
+          {{> "systems/VnV/templates/actor/parts/actor-classes.hbs"}}
         </section>
 
       </section>
     </div>
 
-    {{!-- Biography Tab --}}
-    <div class="tab biography" data-group="primary" data-tab="description">
-      {{!-- Editors must receive enriched text data from getData to properly handle rolls --}}
-      {{editor enrichedBiography target="system.biography" engine="prosemirror" button=true editable=editable}}
-    </div>
-
     {{!-- Owned Items Tab --}}
     <div class="tab items" data-group="primary" data-tab="items">
+      <div class="flex-group-center" style="margin-bottom: 10px;">
+        <label for="system.currency.value" class="resource-label">Currency</label>
+        <input type="text" name="system.currency.value" value="{{system.currency.value}}" data-dtype="Number"/>
+      </div>
        {{> "systems/VnV/templates/actor/parts/actor-items.hbs"}}
     </div>
 
@@ -194,9 +196,10 @@
       {{> "systems/VnV/templates/actor/parts/actor-status-vices.hbs"}}
     </div>
 
-    {{!-- Active Effects Tab --}}
-    <div class="tab effects flexcol" data-group="primary" data-tab="effects">
-      {{> "systems/VnV/templates/actor/parts/actor-effects.hbs"}}
+    {{!-- Biography Tab --}}
+    <div class="tab biography" data-group="primary" data-tab="description">
+      {{!-- Editors must receive enriched text data from getData to properly handle rolls --}}
+      {{editor enrichedBiography target="system.biography" engine="prosemirror" button=true editable=editable}}
     </div>
 
   </section>

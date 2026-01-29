@@ -1,6 +1,6 @@
-import BoilerplateItemBase from "./base-item.mjs";
+import VnVItemBase from "./base-item.mjs";
 
-export default class BoilerplateItem extends BoilerplateItemBase {
+export default class VnVItem extends VnVItemBase {
 
   static defineSchema() {
     const fields = foundry.data.fields;

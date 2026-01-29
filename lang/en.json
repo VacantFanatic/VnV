@@ -1,10 +1,22 @@
 {
   "VNV": {
     "Ability": {
-      "Smarts": { "long": "Smarts", "abbr": "SMT" },
-      "Brawn": { "long": "Brawn", "abbr": "BRN" },
-      "Guts": { "long": "Guts", "abbr": "GUT" },
-      "Charm": { "long": "Charm", "abbr": "CHM" }
+      "Smarts": {
+        "long": "Smarts",
+        "abbr": "SMT"
+      },
+      "Brawn": {
+        "long": "Brawn",
+        "abbr": "BRN"
+      },
+      "Guts": {
+        "long": "Guts",
+        "abbr": "GUT"
+      },
+      "Charm": {
+        "long": "Charm",
+        "abbr": "CHM"
+      }
     },
     "Kin": {
       "Humans": "Humans",
@@ -21,44 +33,82 @@
       "Otherlings": "Otherlings"
     },
     "Status": {
-      "Exhausted": "Exhausted",
-      "Exhausted.Desc": "You have not slept enough. -1 to Smarts and Brawn.",
-      "Dehydrated": "Dehydrated",
-      "Dehydrated.Desc": "You are severely dehydrated.",
-      "Vice": "Vice",
-      "Vice.Desc": "You are affected by a vice.",
-      "Downed": "Downed",
-      "Downed.Desc": "You are downed and cannot act.",
-      "Dead": "Dead",
-      "Dead.Desc": "You are dead.",
-      "Ghost": "Ghost",
-      "Ghost.Desc": "You are a ghost.",
-      "Zombie": "Zombie",
-      "Zombie.Desc": "You are a zombie.",
-      "Prone": "Prone",
-      "Prone.Desc": "You are lying on the ground.",
-      "Poisoned": "Poisoned",
-      "Poisoned.Desc": "You are poisoned.",
-      "Drunk": "Drunk",
-      "Drunk.Desc": "You are intoxicated.",
-      "Filthy": "Filthy",
-      "Filthy.Desc": "You are covered in filth.",
-      "Burning": "Burning",
-      "Burning.Desc": "You are on fire.",
-      "Stunned": "Stunned",
-      "Stunned.Desc": "You are stunned and cannot act.",
-      "Terrified": "Terrified",
-      "Terrified.Desc": "You are terrified.",
-      "Horny": "Horny",
-      "Horny.Desc": "You are aroused.",
-      "Blinded": "Blinded",
-      "Blinded.Desc": "You cannot see.",
-      "Charmed": "Charmed",
-      "Charmed.Desc": "You are charmed.",
-      "Restrained": "Restrained",
-      "Restrained.Desc": "You are restrained and cannot move freely.",
-      "Berserk": "Berserk",
-      "Berserk.Desc": "You are in a berserk rage."
+      "Exhausted": {
+        "name": "Exhausted",
+        "Desc": "You have not slept enough. -1 to Smarts and Brawn."
+      },
+      "Dehydrated": {
+        "name": "Dehydrated",
+        "Desc": "You are severely dehydrated."
+      },
+      "Vice": {
+        "name": "Vice",
+        "Desc": "You are affected by a vice."
+      },
+      "Downed": {
+        "name": "Downed",
+        "Desc": "You are downed and cannot act."
+      },
+      "Dead": {
+        "name": "Dead",
+        "Desc": "You are dead."
+      },
+      "Ghost": {
+        "name": "Ghost",
+        "Desc": "You are a ghost."
+      },
+      "Zombie": {
+        "name": "Zombie",
+        "Desc": "You are a zombie."
+      },
+      "Prone": {
+        "name": "Prone",
+        "Desc": "You are lying on the ground."
+      },
+      "Poisoned": {
+        "name": "Poisoned",
+        "Desc": "You are poisoned."
+      },
+      "Drunk": {
+        "name": "Drunk",
+        "Desc": "You are intoxicated."
+      },
+      "Filthy": {
+        "name": "Filthy",
+        "Desc": "You are covered in filth."
+      },
+      "Burning": {
+        "name": "Burning",
+        "Desc": "You are on fire."
+      },
+      "Stunned": {
+        "name": "Stunned",
+        "Desc": "You are stunned and cannot act."
+      },
+      "Terrified": {
+        "name": "Terrified",
+        "Desc": "You are terrified."
+      },
+      "Horny": {
+        "name": "Horny",
+        "Desc": "You are aroused."
+      },
+      "Blinded": {
+        "name": "Blinded",
+        "Desc": "You cannot see."
+      },
+      "Charmed": {
+        "name": "Charmed",
+        "Desc": "You are charmed."
+      },
+      "Restrained": {
+        "name": "Restrained",
+        "Desc": "You are restrained and cannot move freely."
+      },
+      "Berserk": {
+        "name": "Berserk",
+        "Desc": "You are in a berserk rage."
+      }
     },
     "Vice": {
       "ScaredyCat": "Scaredy Cat",
@@ -88,9 +138,23 @@
     },
     "Item": {
       "Spell": {
-        "SpellLVL": "Level {level} Spells",
-        "AddLVL": "Add LVL {level}"
-      }
+        "Type": "Type",
+        "TypeBasic": "Basic",
+        "TypeAdvanced": "Advanced",
+        "MotesCost": "Motes Cost",
+        "Targets": "Targets",
+        "Effect": "Effect",
+        "Damage": "Damage",
+        "DamageOptional": "Damage (Optional)"
+      },
+      "Item": {
+        "Quantity": "Quantity",
+        "Weight": "Weight",
+        "RollFormula": "Roll Formula"
+      },
+      "Feature": {},
+      "Class": {},
+      "Ability": {}
     },
     "Effect": {
       "Source": "Source",
@@ -100,7 +164,6 @@
       "Inactive": "Inactive Effects"
     }
   },
-
   "TYPES": {
     "Actor": {
       "character": "Character",
@@ -109,7 +172,10 @@
     "Item": {
       "item": "Item",
       "feature": "Feature",
-      "spell": "Spell"
+      "spell": "Spell",
+      "class": "Class",
+      "ability": "Ability",
+      "kin": "Kin"
     }
   }
 }

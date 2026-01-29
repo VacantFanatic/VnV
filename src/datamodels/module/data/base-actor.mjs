@@ -1,6 +1,6 @@
-import BoilerplateDataModel from "./base-model.mjs";
+import VnVDataModel from "./base-model.mjs";
 
-export default class BoilerplateActorBase extends BoilerplateDataModel {
+export default class VnVActorBase extends VnVDataModel {
 
   static defineSchema() {
     const fields = foundry.data.fields;

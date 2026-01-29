@@ -79,80 +79,80 @@ VNV.rules = {
  */
 VNV.statusEffects = {
   exhausted: {
-    label: 'VNV.Status.Exhausted',
+    label: 'VNV.Status.Exhausted.name',
     description: 'VNV.Status.Exhausted.Desc',
     penalties: { smarts: -1, brawn: -1 }
   },
   dehydrated: {
-    label: 'VNV.Status.Dehydrated',
+    label: 'VNV.Status.Dehydrated.name',
     description: 'VNV.Status.Dehydrated.Desc'
   },
   vice: {
-    label: 'VNV.Status.Vice',
+    label: 'VNV.Status.Vice.name',
     description: 'VNV.Status.Vice.Desc'
   },
   downed: {
-    label: 'VNV.Status.Downed',
+    label: 'VNV.Status.Downed.name',
     description: 'VNV.Status.Downed.Desc'
   },
   dead: {
-    label: 'VNV.Status.Dead',
+    label: 'VNV.Status.Dead.name',
     description: 'VNV.Status.Dead.Desc'
   },
   ghost: {
-    label: 'VNV.Status.Ghost',
+    label: 'VNV.Status.Ghost.name',
     description: 'VNV.Status.Ghost.Desc'
   },
   zombie: {
-    label: 'VNV.Status.Zombie',
+    label: 'VNV.Status.Zombie.name',
     description: 'VNV.Status.Zombie.Desc'
   },
   prone: {
-    label: 'VNV.Status.Prone',
+    label: 'VNV.Status.Prone.name',
     description: 'VNV.Status.Prone.Desc'
   },
   poisoned: {
-    label: 'VNV.Status.Poisoned',
+    label: 'VNV.Status.Poisoned.name',
     description: 'VNV.Status.Poisoned.Desc'
   },
   drunk: {
-    label: 'VNV.Status.Drunk',
+    label: 'VNV.Status.Drunk.name',
     description: 'VNV.Status.Drunk.Desc'
   },
   filthy: {
-    label: 'VNV.Status.Filthy',
+    label: 'VNV.Status.Filthy.name',
     description: 'VNV.Status.Filthy.Desc'
   },
   burning: {
-    label: 'VNV.Status.Burning',
+    label: 'VNV.Status.Burning.name',
     description: 'VNV.Status.Burning.Desc'
   },
   stunned: {
-    label: 'VNV.Status.Stunned',
+    label: 'VNV.Status.Stunned.name',
     description: 'VNV.Status.Stunned.Desc'
   },
   terrified: {
-    label: 'VNV.Status.Terrified',
+    label: 'VNV.Status.Terrified.name',
     description: 'VNV.Status.Terrified.Desc'
   },
   horny: {
-    label: 'VNV.Status.Horny',
+    label: 'VNV.Status.Horny.name',
     description: 'VNV.Status.Horny.Desc'
   },
   blinded: {
-    label: 'VNV.Status.Blinded',
+    label: 'VNV.Status.Blinded.name',
     description: 'VNV.Status.Blinded.Desc'
   },
   charmed: {
-    label: 'VNV.Status.Charmed',
+    label: 'VNV.Status.Charmed.name',
     description: 'VNV.Status.Charmed.Desc'
   },
   restrained: {
-    label: 'VNV.Status.Restrained',
+    label: 'VNV.Status.Restrained.name',
     description: 'VNV.Status.Restrained.Desc'
   },
   berserk: {
-    label: 'VNV.Status.Berserk',
+    label: 'VNV.Status.Berserk.name',
     description: 'VNV.Status.Berserk.Desc'
   }
 };

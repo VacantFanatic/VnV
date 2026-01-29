@@ -1,8 +1,8 @@
-# Boilerplate System
+# Vice and Violence (VnV) System
 
-![Foundry v11](https://img.shields.io/badge/foundry-v11-green)
+![Foundry v13](https://img.shields.io/badge/foundry-v13-green)
 
-This system is a boilerplate system that you can use as a starting point for building your own custom systems. It's similar to Simple World-building, but has examples of creating attributes in code rather than dynamically through the UI.
+The Vice and Violence system for FoundryVTT - a role-playing game system featuring unique mechanics for status effects, vices, and character progression.
 
 ## Usage
 

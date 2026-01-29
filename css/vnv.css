@@ -1,0 +1,726 @@
+@import url("https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Roboto:wght@400;700&display=swap");
+/* Global styles */
+.window-app {
+  font-family: "Roboto", sans-serif;
+}
+
+/* Parchment/beige background color palette */
+.vnv {
+  background: #F5F5DC; /* Parchment/beige background */
+  color: #000; /* Black text */
+}
+
+.vnv .window-header {
+  background: #8B4513; /* Reddish-brown for headers */
+  color: #FFF;
+  border-bottom: 2px solid #654321;
+}
+
+.vnv .window-header .window-title {
+  font-weight: 600;
+  font-size: 1.2em;
+  color: #FFF;
+}
+
+.vnv .sheet-header h1.charname input {
+  color: #8B4513; /* Reddish-brown for character name */
+  font-weight: 600;
+  font-size: 1.3em;
+}
+
+.vnv .sheet-body {
+  background: #F5F5DC;
+  color: #000;
+}
+
+/* Serif font for descriptive text */
+.vnv .description,
+.vnv .editor-content,
+.vnv .editor-content p,
+.vnv .biography,
+.vnv .tox .tox-edit-area {
+  font-family: "Crimson Text", serif;
+  font-style: italic;
+  color: #000;
+}
+
+/* Horizontal separators */
+.vnv hr,
+.vnv .separator {
+  border: none;
+  border-top: 1px solid #8B4513;
+  margin: 10px 0;
+}
+
+/* Resource labels and headings */
+.vnv .resource-label,
+.vnv h3,
+.vnv h4,
+.vnv .items-header {
+  font-weight: bold;
+  color: #000;
+}
+
+/* Borders and boxes */
+.vnv .flex-group-center,
+.vnv .flex-group-left,
+.vnv .flex-group-right {
+  border: 1px solid #8B4513;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 5px;
+}
+
+.rollable:hover, .rollable:focus {
+  color: #8B4513;
+  text-shadow: 0 0 5px rgba(139, 69, 19, 0.5);
+  cursor: pointer;
+}
+
+.vnv .rollable:hover, .vnv .rollable:focus {
+  color: #8B4513;
+  text-shadow: 0 0 5px rgba(139, 69, 19, 0.5);
+  cursor: pointer;
+}
+
+.grid,
+.grid-2col {
+  display: grid;
+  grid-column: span 2/span 2;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 10px 0;
+  padding: 0;
+}
+
+.grid-3col {
+  grid-column: span 3/span 3;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-4col {
+  grid-column: span 4/span 4;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.grid-5col {
+  grid-column: span 5/span 5;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.grid-6col {
+  grid-column: span 6/span 6;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.grid-7col {
+  grid-column: span 7/span 7;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.grid-8col {
+  grid-column: span 8/span 8;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.grid-9col {
+  grid-column: span 9/span 9;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+
+.grid-10col {
+  grid-column: span 10/span 10;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+.grid-11col {
+  grid-column: span 11/span 11;
+  grid-template-columns: repeat(11, minmax(0, 1fr));
+}
+
+.grid-12col {
+  grid-column: span 12/span 12;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.grid-start-2 {
+  grid-column-start: 2;
+}
+
+.grid-start-3 {
+  grid-column-start: 3;
+}
+
+.grid-start-4 {
+  grid-column-start: 4;
+}
+
+.grid-start-5 {
+  grid-column-start: 5;
+}
+
+.grid-start-6 {
+  grid-column-start: 6;
+}
+
+.grid-start-7 {
+  grid-column-start: 7;
+}
+
+.grid-start-8 {
+  grid-column-start: 8;
+}
+
+.grid-start-9 {
+  grid-column-start: 9;
+}
+
+.grid-start-10 {
+  grid-column-start: 10;
+}
+
+.grid-start-11 {
+  grid-column-start: 11;
+}
+
+.grid-start-12 {
+  grid-column-start: 12;
+}
+
+.grid-span-2 {
+  grid-column-end: span 2;
+}
+
+.grid-span-3 {
+  grid-column-end: span 3;
+}
+
+.grid-span-4 {
+  grid-column-end: span 4;
+}
+
+.grid-span-5 {
+  grid-column-end: span 5;
+}
+
+.grid-span-6 {
+  grid-column-end: span 6;
+}
+
+.grid-span-7 {
+  grid-column-end: span 7;
+}
+
+.grid-span-8 {
+  grid-column-end: span 8;
+}
+
+.grid-span-9 {
+  grid-column-end: span 9;
+}
+
+.grid-span-10 {
+  grid-column-end: span 10;
+}
+
+.grid-span-11 {
+  grid-column-end: span 11;
+}
+
+.grid-span-12 {
+  grid-column-end: span 12;
+}
+
+.flex-group-center,
+.flex-group-left,
+.flex-group-right {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.flex-group-left {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.flex-group-right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.flexshrink {
+  flex: 0;
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+.flexlarge {
+  flex: 2;
+}
+
+.align-left {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.align-right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.align-center {
+  justify-content: center;
+  text-align: center;
+}
+
+/* Styles limited to VnV sheets */
+.vnv .item-form {
+  font-family: "Roboto", sans-serif;
+}
+.vnv .sheet-header {
+  flex: 0 auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+  background: #F5F5DC;
+  padding: 10px;
+  border-bottom: 2px solid #8B4513;
+}
+.vnv .sheet-header .profile-img {
+  flex: 0 0 100px;
+  height: 100px;
+  margin-right: 10px;
+  border: 2px solid #8B4513;
+}
+.vnv .sheet-header .header-fields {
+  flex: 1;
+}
+.vnv .sheet-header h1.charname {
+  height: 50px;
+  padding: 0px;
+  margin: 5px 0;
+  border-bottom: 0;
+}
+.vnv .sheet-header h1.charname input {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: transparent;
+  border: none;
+  color: #8B4513;
+  font-weight: 600;
+  font-size: 1.3em;
+}
+.vnv .sheet-tabs {
+  flex: 0;
+  background: #F5F5DC;
+  border-bottom: 1px solid #8B4513;
+}
+.vnv .sheet-tabs .item {
+  color: #8B4513;
+  border-bottom: 2px solid transparent;
+}
+.vnv .sheet-tabs .item.active {
+  border-bottom: 2px solid #8B4513;
+  color: #000;
+  font-weight: bold;
+}
+.vnv .sheet-body,
+.vnv .sheet-body .tab,
+.vnv .sheet-body .tab .editor {
+  height: 100%;
+  background: #F5F5DC;
+  color: #000;
+}
+.vnv .tox .tox-editor-container {
+  background: #F5F5DC;
+}
+.vnv .tox .tox-edit-area {
+  padding: 0 8px;
+  background: #F5F5DC;
+  color: #000;
+}
+.vnv .resource-label {
+  font-weight: bold;
+  color: #000;
+}
+.vnv .items-header {
+  height: 28px;
+  margin: 2px 0;
+  padding: 0;
+  align-items: center;
+  background: rgba(139, 69, 19, 0.1);
+  border: 1px solid #8B4513;
+  font-weight: bold;
+  color: #000;
+}
+.vnv .items-header > * {
+  font-size: 14px;
+  text-align: center;
+  color: #000;
+}
+.vnv .items-header .item-name {
+  font-weight: bold;
+  padding-left: 5px;
+  text-align: left;
+  display: flex;
+  color: #000;
+}
+.vnv .items-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  color: #000;
+  background: #F5F5DC;
+}
+.vnv .items-list .item-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.vnv .items-list .item-name {
+  flex: 2;
+  margin: 0;
+  overflow: hidden;
+  font-size: 13px;
+  text-align: left;
+  align-items: center;
+  display: flex;
+  color: #000;
+}
+.vnv .items-list .item-name h3, .vnv .items-list .item-name h4 {
+  margin: 0;
+  white-space: nowrap;
+  overflow-x: hidden;
+  color: #000;
+}
+.vnv .items-list .item-controls {
+  display: flex;
+  flex: 0 0 100px;
+  justify-content: flex-end;
+}
+.vnv .items-list .item-controls a {
+  font-size: 12px;
+  text-align: center;
+  margin: 0 6px;
+  color: #8B4513;
+}
+.vnv .items-list .item-controls a:hover {
+  color: #654321;
+}
+.vnv .items-list .item {
+  align-items: center;
+  padding: 0 2px;
+  border-bottom: 1px solid #8B4513;
+  background: rgba(255, 255, 255, 0.2);
+}
+.vnv .items-list .item:last-child {
+  border-bottom: none;
+}
+.vnv .items-list .item .item-name {
+  color: #000;
+}
+.vnv .items-list .item .item-name .item-image {
+  flex: 0 0 30px;
+  height: 30px;
+  background-size: 30px;
+  border: 1px solid #8B4513;
+  margin-right: 5px;
+}
+.vnv .items-list .item-prop {
+  text-align: center;
+  border-left: 1px solid #8B4513;
+  border-right: 1px solid #8B4513;
+  font-size: 12px;
+  color: #000;
+}
+.vnv .items-list .items-header {
+  height: 28px;
+  margin: 2px 0;
+  padding: 0;
+  align-items: center;
+  background: rgba(139, 69, 19, 0.1);
+  border: 1px solid #8B4513;
+  font-weight: bold;
+  color: #000;
+}
+.vnv .items-list .items-header > * {
+  font-size: 12px;
+  text-align: center;
+  color: #000;
+}
+.vnv .items-list .items-header .item-name {
+  padding-left: 5px;
+  text-align: left;
+  color: #000;
+}
+.vnv .item-formula {
+  flex: 0 0 200px;
+  padding: 0 8px;
+  color: #000;
+}
+.vnv .effects .item .effect-source,
+.vnv .effects .item .effect-duration,
+.vnv .effects .item .effect-controls {
+  text-align: center;
+  border-left: 1px solid #8B4513;
+  border-right: 1px solid #8B4513;
+  font-size: 12px;
+  color: #000;
+}
+.vnv .effects .item .effect-controls {
+  border: none;
+}
+
+/* Input fields styling */
+.vnv input[type="text"],
+.vnv input[type="number"],
+.vnv textarea,
+.vnv select {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid #8B4513;
+  color: #000;
+}
+
+.vnv input[type="text"]:focus,
+.vnv input[type="number"]:focus,
+.vnv textarea:focus,
+.vnv select:focus {
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid #8B4513;
+  outline: none;
+}
+
+/* Resource boxes */
+.vnv .resource {
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid #8B4513;
+}
+
+.vnv .resource-content {
+  color: #000;
+}
+
+/* Character info sections */
+.vnv .character-info {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px;
+  border: 1px solid #8B4513;
+  margin: 5px 0;
+}
+
+/* Tabs styling */
+.vnv .tabs {
+  border-bottom: 2px solid #8B4513;
+}
+
+.vnv .tabs .item {
+  color: #8B4513;
+  border-bottom: 2px solid transparent;
+  padding: 5px 10px;
+}
+
+.vnv .tabs .item:hover {
+  background: rgba(139, 69, 19, 0.1);
+}
+
+.vnv .tabs .item.active {
+  border-bottom: 2px solid #8B4513;
+  color: #000;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Buttons */
+.vnv button {
+  background: rgba(139, 69, 19, 0.2);
+  border: 1px solid #8B4513;
+  color: #000;
+  padding: 5px 10px;
+}
+
+.vnv button:hover {
+  background: rgba(139, 69, 19, 0.4);
+  color: #000;
+}
+
+/* Checkboxes and other form elements */
+.vnv input[type="checkbox"] {
+  accent-color: #8B4513;
+}
+
+/* Class and Ability styling */
+.vnv .class-header {
+  background: rgba(139, 69, 19, 0.15);
+  border: 2px solid #8B4513;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.vnv .class-header h4 {
+  color: #8B4513;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.vnv .ability-item {
+  background: rgba(255, 255, 255, 0.2);
+  border-left: 3px solid #8B4513;
+  margin-left: 30px;
+  padding-left: 10px;
+  margin-bottom: 2px;
+}
+
+.vnv .ability-item h5 {
+  color: #000;
+  font-weight: normal;
+  font-size: 0.95em;
+  margin: 0;
+}
+
+/* Status and Vices styling */
+.vnv .status-vices {
+  padding: 10px;
+}
+
+.vnv .status-effects-section,
+.vnv .vices-section {
+  margin-bottom: 20px;
+}
+
+.vnv .status-effects-section h3,
+.vnv .vices-section h3 {
+  background: rgba(139, 69, 19, 0.1);
+  border: 1px solid #8B4513;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #000;
+}
+
+.vnv .status-list,
+.vnv .vices-list {
+  gap: 5px;
+}
+
+.vnv .status-item,
+.vnv .vice-item {
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid #8B4513;
+  padding: 5px;
+  margin: 0;
+  align-items: center;
+  min-height: 30px;
+}
+
+.vnv .status-item label,
+.vnv .vice-item label {
+  margin-left: 5px;
+  color: #000;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.vnv .status-item input[type="checkbox"],
+.vnv .vice-item input[type="checkbox"] {
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.vnv .vice-alleviated {
+  margin-left: 10px;
+  font-size: 0.9em;
+  color: #654321;
+}
+
+/* Downed section styling */
+.vnv .downed-section {
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.vnv .downed-skulls {
+  gap: 15px;
+  margin-top: 5px;
+}
+
+.vnv .downed-skull {
+  font-size: 1.5em;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vnv .downed-skull:hover {
+  color: #8B4513;
+  transform: scale(1.1);
+}
+
+.vnv .downed-skull.active {
+  color: #8B4513;
+  text-shadow: 0 0 8px rgba(139, 69, 19, 0.6);
+}
+
+/* Drop zone and chip styling */
+.vnv .drop-zone {
+  min-height: 32px;
+  min-width: 120px;
+  border: 2px dashed #8B4513;
+  border-radius: 4px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 69, 19, 0.05);
+  transition: all 0.2s ease;
+}
+
+.vnv .drop-zone:hover {
+  background: rgba(139, 69, 19, 0.1);
+  border-color: #654321;
+}
+
+.vnv .drop-zone-placeholder {
+  color: #999;
+  font-style: italic;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+.vnv .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #8B4513;
+  color: #FFF;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.9em;
+  max-width: 100%;
+}
+
+.vnv .chip-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+.vnv .chip-delete {
+  color: #FFF;
+  cursor: pointer;
+  margin-left: 4px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.vnv .chip-delete:hover {
+  opacity: 1;
+}

@@ -16,18 +16,19 @@
     </div>
   </header>
 
-  {{! Sheet Tab Navigation }}
+  {{!-- Sheet Tab Navigation --}}
   <nav class='sheet-tabs tabs' data-group='primary'>
     <a class='item' data-tab='description'>Description</a>
     <a class='item' data-tab='attributes'>Attributes</a>
+    <a class='item' data-tab='effects'>Effects</a>
   </nav>
 
-  {{! Sheet Body }}
+  {{!-- Sheet Body --}}
   <section class='sheet-body'>
 
-    {{! Description Tab }}
+    {{!-- Description Tab --}}
     <div class='tab' data-group='primary' data-tab='description'>
-      {{! Editors must receive enriched text data from getData to properly handle rolls }}
+      {{!-- Editors must receive enriched text data from getData to properly handle rolls --}}
       {{editor
         enrichedDescription
         target='system.description'
@@ -37,18 +38,59 @@
       }}
     </div>
 
-    {{! Attributes Tab }}
+    {{!-- Attributes Tab --}}
     <div class='tab attributes' data-group='primary' data-tab='attributes'>
-      {{! As you add new fields, add them in here! }}
-      <div class='resource'>
-        <label class='resource-label'>Spell Level</label>
+      <div class='resource flex-group-center'>
+        <label class='resource-label'>{{localize 'VNV.Item.Spell.Type'}}</label>
+        <select name='system.type' data-dtype='String'>
+          <option value='basic' {{selected (eq system.type 'basic')}}>{{localize 'VNV.Item.Spell.TypeBasic'}}</option>
+          <option value='advanced' {{selected (eq system.type 'advanced')}}>{{localize 'VNV.Item.Spell.TypeAdvanced'}}</option>
+        </select>
+      </div>
+
+      <div class='resource flex-group-center'>
+        <label class='resource-label'>{{localize 'VNV.Item.Spell.MotesCost'}}</label>
         <input
           type='text'
-          name='system.spellLevel'
-          value='{{system.spellLevel}}'
+          name='system.motesCost'
+          value='{{system.motesCost}}'
           data-dtype='Number'
         />
       </div>
+
+      <div class='resource flex-group-center'>
+        <label class='resource-label'>{{localize 'VNV.Item.Spell.Targets'}}</label>
+        <input
+          type='text'
+          name='system.targets'
+          value='{{system.targets}}'
+          data-dtype='Number'
+        />
+      </div>
+
+      <div class='resource flex-group-center'>
+        <label class='resource-label'>{{localize 'VNV.Item.Spell.Effect'}}</label>
+        <textarea
+          name='system.effect'
+          rows='3'
+          placeholder='Describe the spell effect...'
+        >{{system.effect}}</textarea>
+      </div>
+
+      <div class='resource flex-group-center'>
+        <label class='resource-label'>{{localize 'VNV.Item.Spell.DamageOptional'}}</label>
+        <input
+          type='text'
+          name='system.damage'
+          value='{{system.damage}}'
+          placeholder='e.g., 1d6+2'
+        />
+      </div>
+    </div>
+
+    {{!-- Effects Tab --}}
+    <div class='tab effects' data-group='primary' data-tab='effects'>
+      {{> "systems/VnV/templates/item/parts/item-effects.hbs"}}
     </div>
   </section>
 </form>

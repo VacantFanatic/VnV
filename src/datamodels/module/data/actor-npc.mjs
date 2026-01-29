@@ -1,6 +1,6 @@
-import BoilerplateActorBase from "./base-actor.mjs";
+import VnVActorBase from "./base-actor.mjs";
 
-export default class BoilerplateNPC extends BoilerplateActorBase {
+export default class VnVNPC extends VnVActorBase {
 
   static defineSchema() {
     const fields = foundry.data.fields;
